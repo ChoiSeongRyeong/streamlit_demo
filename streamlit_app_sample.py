@@ -1,38 +1,82 @@
 from collections import namedtuple
 import altair as alt
+import os
 import math
+import yaml
 import pandas as pd
+import numpy as np
 import streamlit as st
+from PIL import Image
+import streamlit_authenticator as stauth
+from icecream import ic
+from glob import glob
 
-"""
-# Welcome to Streamlit demo!
+from src.util import getYearList, getYearDirectoryConfig
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:
+WORKDIR = "/app"
 
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
+# make hashed passwords
+# hashed_passwords = stauth.Hasher(['']).generate()
 
-In the meantime, below is an example of what you can do with just a few lines of code:
-"""
+# read authentication configuration file
+with open('./config.yaml') as file:
+    config = yaml.safe_load(file)
+authenticator = stauth.Authenticate(
+    config['credentials'],
+    config['cookie']['name'],
+    config['cookie']['key'],
+    config['cookie']['expiry_days'],
+#    config['preauthorized']
+)
 
+# login page
+name, authentication_status, username = authenticator.login('Login', 'main')
+# main page
+if st.session_state["authentication_status"] == False:
+    st.error('Username/password is incorrect')
+elif st.session_state["authentication_status"] == None:
+    st.warning('Please enter your username and password')
+elif st.session_state["authentication_status"]:
+    authenticator.logout('Logout', 'main')
+    st.write(f'Welcome *{st.session_state["name"]}*')
+    
+    # 연도 선택
+    YEAR_LIST = getYearList()
+    year =  st.selectbox(
+        "choose year",
+        YEAR_LIST
+    )
+    # 해당 연도 정보 처리
+    assert glob(f"data/result/{year}")
+    dir_config = getYearDirectoryConfig(year)
 
-with st.echo(code_location='below'):
-    total_points = st.slider("Number of points in spiral", 1, 5000, 2000)
-    num_turns = st.slider("Number of turns in spiral", 1, 100, 9)
+    if not dir_config:
+        st.warning("No images. Choose an another year.")
+    else:
+        ic(dir_config["dir_children_names"])
 
-    Point = namedtuple('Point', 'x y')
-    data = []
+        # 이벤트 다중선택
+        choices = st.multiselect("choose events", dir_config["dir_children_names"], default=None)
+        #st.write(f"choices: {choices}")
+        # 해당 이벤트 정보 처리
+        choices_with_index = dir_config["dir_children_names"][dir_config["dir_children_names"].isin(choices)]
+        if len(choices_with_index) == 0:
+            st.warning("No event selected. Choose events.")
+        else:
+            #st.write(f"choices_with_index: {choices_with_index}")
+            for idx, choice in enumerate(choices_with_index):
 
-    points_per_turn = total_points / num_turns
-
-    for curr_point_num in range(total_points):
-        curr_turn, i = divmod(curr_point_num, points_per_turn)
-        angle = (curr_turn + 1) * 2 * math.pi * i / points_per_turn
-        radius = curr_point_num / total_points
-        x = radius * math.cos(angle)
-        y = radius * math.sin(angle)
-        data.append(Point(x, y))
-
-    st.altair_chart(alt.Chart(pd.DataFrame(data), height=500, width=500)
-        .mark_circle(color='#0068c9', opacity=0.5)
-        .encode(x='x:Q', y='y:Q'))
+                item_paths = glob(os.path.join(WORKDIR, f"data/result/{year}/{idx}/*.jpg"))
+                n_items = len(item_paths)
+                st.write(f"event: {choice}")
+                st.write(f"number of items: {n_items}")
+                k = 0
+                for i in range(n_items):
+                    if i % 3 == 0:
+                        col_1, col_2, col_3 = st.columns(3)
+                        col_1.image(os.path.join(WORKDIR, f"data/result/{year}/{idx}/{i}.jpg"))
+                    elif i % 3 == 1:
+                        col_2.image(os.path.join(WORKDIR, f"data/result/{year}/{idx}/{i}.jpg"))
+                    else:
+                        col_3.image(os.path.join(WORKDIR, f"data/result/{year}/{idx}/{i}.jpg"))
+        

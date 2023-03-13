@@ -2,3 +2,5 @@ altair
 pandas
 streamlit
 awesome-streamlit
+streamlit-authenticator
+icecream

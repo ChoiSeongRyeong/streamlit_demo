@@ -1,0 +1,13 @@
+credentials:
+  usernames:
+    yonseijoy:
+      email: 
+      name: Yonsei Joy
+      password: $2b$12$MjAZzB0HEg2PpuXLKB7XQuzBXg76shl8WhDMssmWu2Q8aIldOYpQq # To be replaced with hashed password
+cookie:
+  expiry_days: 30
+  key: random_signature_key # Must be string
+  name: random_cookie_name
+#preauthorized:
+#  emails:
+#  - melsby@gmail.com
