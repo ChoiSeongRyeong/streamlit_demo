@@ -65,18 +65,18 @@ elif st.session_state["authentication_status"]:
         else:
             #st.write(f"choices_with_index: {choices_with_index}")
             for idx, choice in enumerate(choices_with_index):
-
+                
                 item_paths = glob(os.path.join(WORKDIR, f"data/result/{year}/{idx}/*.jpg"))
                 n_items = len(item_paths)
                 st.write(f"event: {choice}")
                 st.write(f"number of items: {n_items}")
                 k = 0
-                for i in range(n_items):
+                for i, item_path in enumerate(item_paths):
                     if i % 3 == 0:
                         col_1, col_2, col_3 = st.columns(3)
-                        col_1.image(os.path.join(WORKDIR, f"data/result/{year}/{idx}/{i}.jpg"))
+                        col_1.image(item_path)
                     elif i % 3 == 1:
-                        col_2.image(os.path.join(WORKDIR, f"data/result/{year}/{idx}/{i}.jpg"))
+                        col_2.image(item_path)
                     else:
-                        col_3.image(os.path.join(WORKDIR, f"data/result/{year}/{idx}/{i}.jpg"))
+                        col_3.image(item_path)
         

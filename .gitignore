@@ -1,5 +1,6 @@
 # Custom
 data/
+data.zip
 *.pem
 
 # Byte-compiled / optimized / DLL files
