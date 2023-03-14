@@ -29,6 +29,15 @@ authenticator = stauth.Authenticate(
 #    config['preauthorized']
 )
 
+# page settings
+st.set_page_config(
+    page_title="Yonsei Joy Photo Album",
+    page_icon=":photo:",
+    menu_items={
+        'About': "연세죠이 사진첩입니다."
+    }
+)
+
 # login page
 name, authentication_status, username = authenticator.login('Login', 'main')
 # main page
@@ -37,6 +46,7 @@ if st.session_state["authentication_status"] == False:
 elif st.session_state["authentication_status"] == None:
     st.warning('Please enter your username and password')
 elif st.session_state["authentication_status"]:
+    
     authenticator.logout('Logout', 'main')
     st.write(f'Welcome *{st.session_state["name"]}*')
     
