@@ -74,9 +74,18 @@ elif st.session_state["authentication_status"]:
                 for i, item_path in enumerate(item_paths):
                     if i % 3 == 0:
                         col_1, col_2, col_3 = st.columns(3)
-                        col_1.image(item_path)
+                        try:
+                            col_1.image(item_path)
+                        except:
+                            st.error(f"error raised when loading image from {item_path}")
                     elif i % 3 == 1:
-                        col_2.image(item_path)
+                        try:
+                            col_2.image(item_path)
+                        except:
+                            st.error(f"error raised when loading image from {item_path}")
                     else:
-                        col_3.image(item_path)
+                        try:
+                            col_3.image(item_path)
+                        except:
+                            st.error(f"error raised when loading image from {item_path}")
         
