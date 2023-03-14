@@ -68,24 +68,25 @@ elif st.session_state["authentication_status"]:
                 
                 item_paths = glob(os.path.join(WORKDIR, f"data/result/{year}/{idx}/*.jpg"))
                 n_items = len(item_paths)
-                st.write(f"event: {choice}")
-                st.write(f"number of items: {n_items}")
-                k = 0
-                for i, item_path in enumerate(item_paths):
-                    if i % 3 == 0:
-                        col_1, col_2, col_3 = st.columns(3)
-                        try:
-                            col_1.image(item_path)
-                        except:
-                            st.error(f"error raised when loading image from {item_path}")
-                    elif i % 3 == 1:
-                        try:
-                            col_2.image(item_path)
-                        except:
-                            st.error(f"error raised when loading image from {item_path}")
-                    else:
-                        try:
-                            col_3.image(item_path)
-                        except:
-                            st.error(f"error raised when loading image from {item_path}")
+                with st.expander(choice):
+                    st.write(f"event: {choice}")
+                    st.write(f"number of items: {n_items}")
+                    k = 0
+                    for i, item_path in enumerate(item_paths):
+                        if i % 3 == 0:
+                            col_1, col_2, col_3 = st.columns(3)
+                            try:
+                                col_1.image(item_path)
+                            except:
+                                st.error(f"error raised when loading image from {item_path}")
+                        elif i % 3 == 1:
+                            try:
+                                col_2.image(item_path)
+                            except:
+                                st.error(f"error raised when loading image from {item_path}")
+                        else:
+                            try:
+                                col_3.image(item_path)
+                            except:
+                                st.error(f"error raised when loading image from {item_path}")
         
