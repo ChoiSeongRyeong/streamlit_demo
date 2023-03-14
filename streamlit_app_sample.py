@@ -23,7 +23,9 @@ st.set_page_config(
     page_title="Yonsei Joy Photo Album",
     page_icon=":photo:",
     menu_items={
-        'About': "연세죠이 사진첩입니다."
+        'About': """연세죠이 사진첩입니다.
+        문의나 개선사항은 언제나 환영입니다!
+        문의: 최성령(010-9961-0355)"""
     }
 )
 
@@ -48,7 +50,7 @@ elif st.session_state["authentication_status"] == None:
 elif st.session_state["authentication_status"]:
     
     authenticator.logout('Logout', 'main')
-    st.write(f'Welcome *{st.session_state["name"]}*')
+    st.write(f'Welcome to Yonsei Joy Photo Album, *{st.session_state["name"]}*')
     
     # 연도 선택
     YEAR_LIST = getYearList()
