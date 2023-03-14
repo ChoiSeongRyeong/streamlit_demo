@@ -18,6 +18,15 @@ WORKDIR = "/app"
 # make hashed passwords
 # hashed_passwords = stauth.Hasher(['']).generate()
 
+# page settings
+st.set_page_config(
+    page_title="Yonsei Joy Photo Album",
+    page_icon=":photo:",
+    menu_items={
+        'About': "연세죠이 사진첩입니다."
+    }
+)
+
 # read authentication configuration file
 with open('./config.yaml') as file:
     config = yaml.safe_load(file)
@@ -27,15 +36,6 @@ authenticator = stauth.Authenticate(
     config['cookie']['key'],
     config['cookie']['expiry_days'],
 #    config['preauthorized']
-)
-
-# page settings
-st.set_page_config(
-    page_title="Yonsei Joy Photo Album",
-    page_icon=":photo:",
-    menu_items={
-        'About': "연세죠이 사진첩입니다."
-    }
 )
 
 # login page
