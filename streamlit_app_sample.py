@@ -69,15 +69,13 @@ elif st.session_state["authentication_status"]:
 
         # 이벤트 다중선택
         choices = st.multiselect("choose events", dir_config["dir_children_names"], default=None)
-        #st.write(f"choices: {choices}")
-        # 해당 이벤트 정보 처리
-        choices_with_index = dir_config["dir_children_names"][dir_config["dir_children_names"].isin(choices)]
-        if len(choices_with_index) == 0:
+        
+        if len(choices) == 0:
             st.warning("No event selected. Choose events.")
         else:
-            #st.write(f"choices_with_index: {choices_with_index}")
-            for idx, choice in enumerate(choices_with_index):
-                
+            for i, choice in enumerate(choices):
+                # 해당 이벤트 정보 처리
+                idx = dir_config["dir_children_names"][dir_config["dir_children_names"]==choice].index.item()
                 item_paths = glob(os.path.join(WORKDIR, f"data/result/{year}/{idx}/*.jpg"))
                 n_items = len(item_paths)
                 with st.expander(choice):
